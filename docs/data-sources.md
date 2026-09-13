@@ -1,6 +1,6 @@
 # Data sources and repository policy
 
-The working project was built from public aviation data and local processed files. The GitHub copy is intentionally curated rather than a byte-for-byte mirror.
+The research workflow was built from public aviation data and processed files. The GitHub copy is intentionally curated rather than a byte-for-byte mirror.
 
 ## Included
 

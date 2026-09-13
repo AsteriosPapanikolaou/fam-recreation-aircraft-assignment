@@ -1,4 +1,4 @@
-# Technical Report: Recreation of the Fleet Assignment Model for Envoy Air January 2023 Operations
+# Methodology and Findings: Envoy Air Fleet Assignment Model Recreation
 
 ## 1. Introduction
 

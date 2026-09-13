@@ -65,13 +65,13 @@ pip install -r requirements.txt
 The repository includes the processed cost matrix and feasible initial-position snapshot needed by the solver:
 
 ```powershell
-python scripts/solve_FAm.py
+python scripts/solve_fam.py
 ```
 
 ### 3. Re-run validation
 
 ```powershell
-python scripts/validation_with_real_data.py
+python scripts/validate_assignments.py
 ```
 
 ### 4. Run the full preprocessing chain
@@ -113,7 +113,7 @@ See [docs/data-sources.md](docs/data-sources.md) for the included/excluded files
 4. Operating cost is approximated with aircraft-type cost per mile multiplied by route distance.
 5. The implementation covers the conventional baseline FAM, not the paper's hybrid-electric scenarios.
 
-The full discussion is in [docs/technical-report.md](docs/technical-report.md).
+The methodology and findings are in [docs/methodology.md](docs/methodology.md).
 
 ## Citation
 
