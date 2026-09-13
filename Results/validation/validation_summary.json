@@ -1,0 +1,10 @@
+{
+  "actual_rows": 18849,
+  "fam_rows": 18849,
+  "eligible_rows": 18367,
+  "matched_rows": 13633,
+  "mismatched_rows": 4734,
+  "match_percentage": 74.22551314858168,
+  "not_eligible_rows": 482,
+  "outputs_folder": "Results/validation"
+}

@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.DS_Store
+
+# Solver and temporary files
+*.lp
+*.mps
+*.sol
+*.log
+
+# Large raw source datasets are intentionally kept outside the repository.
+DB1B/Origin_and_Destination_Survey_DB1BMarket_2023_1.csv
+DB1B/Origin_and_Destination_Survey_DB1BMarket_2023_1.zip
+on_time_data/On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2023_1.csv
+on_time_data/On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2023_1.xlsx
+on_time_data/On_Time_Reporting_Carrier_On_Time_Performance_1987_present_2023_1.zip
+ReleasableAircraft/*.txt
+T100/*.zip
+
+# Generated validation artifacts not part of the committed snapshot
+Results/validation/*.xlsx

@@ -1,0 +1,25 @@
+{
+  "solver_status": "Optimal",
+  "objective_value": 79096176.93090898,
+  "flight_count": 18849,
+  "aircraft_types": [
+    "ERJ145",
+    "ERJ170",
+    "ERJ175"
+  ],
+  "fleet_size_by_type": {
+    "ERJ145": 28,
+    "ERJ170": 8,
+    "ERJ175": 101
+  },
+  "assigned_flights_by_type": {
+    "ERJ145": 514,
+    "ERJ170": 975,
+    "ERJ175": 17360
+  },
+  "total_operating_cost": 79058109.76074518,
+  "total_spill_cost": 38067.1701651612,
+  "total_assignment_cost": 79096176.93091033,
+  "cost_check_max_abs": 4.547473508864641e-13,
+  "cost_check_passed": true
+}
