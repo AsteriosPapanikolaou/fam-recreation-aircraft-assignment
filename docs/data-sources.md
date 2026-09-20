@@ -10,7 +10,7 @@ The research workflow was built from public aviation data and processed files. T
 - financial inputs and aircraft-type cost-per-mile table;
 - assignment-cost matrix and repaired initial positions;
 - FAM output, run summary and validation diagnostics;
-- Python scripts and the technical report.
+- Python scripts and the methodology documentation.
 
 ## Not included
 

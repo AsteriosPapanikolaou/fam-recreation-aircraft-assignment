@@ -10,7 +10,7 @@ flowchart TD
     fleet[Reconstruct and repair initial positions]
     solve[Solve time-space FAM]
     validate[Validate against observed aircraft types]
-    report[Export diagnostics and report]
+    docs[Export diagnostics and documentation]
 
     raw --> schedule
     raw --> demand
@@ -21,7 +21,7 @@ flowchart TD
     costs --> fleet
     fleet --> solve
     solve --> validate
-    validate --> report
+    validate --> docs
 ```
 
 The optimization layer uses three aircraft types — ERJ145, ERJ170 and ERJ175 — and a compressed airport/time network containing active event nodes. This keeps the flow-balance formulation faithful to the paper while avoiding inventory variables for every possible airport/time combination.

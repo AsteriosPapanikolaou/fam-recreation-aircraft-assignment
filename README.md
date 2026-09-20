@@ -2,6 +2,7 @@
 
 Recreation of the conventional Fleet Assignment Model (FAM) described in the ICAS 2024 paper *Optimizing Fleet Assignment Decisions for Regional Airlines with Hybrid Electric Aircraft Uptake*. The implementation uses Envoy Air's January 2023 schedule, a time-space network, aircraft-type assignment costs, and PuLP/CBC mixed-integer optimization.
 
+> This repository is a research recreation and benchmark implementation. It is not an exact reproduction of every proprietary, historical, or aircraft-performance input used in the paper.
 
 ## What this project does
 
@@ -33,7 +34,7 @@ flowchart LR
     F --> G[Solve FAM with PuLP + CBC]
     G --> H[Export assignments, fleet mix and run summary]
     H --> I[Validate against FAA-enriched observed aircraft types]
-    I --> J[CSV/JSON diagnostics and technical report]
+    I --> J[CSV/JSON diagnostics and documentation]
 ```
 
 ## Snapshot of the current run
@@ -42,12 +43,12 @@ The committed result snapshot contains:
 
 - **18,849** scheduled flights;
 - **Optimal** CBC solution;
-- objective value **$79,096,176**;
+- objective value **USD 79,096,176.93**;
 - fleet of **137 aircraft**: 28 ERJ145, 8 ERJ170 and 101 ERJ175;
 - eligible aircraft-type match rate of **74.23%** across 18,367 operated flights with an available observed type;
 - cost recomputation check passed within numerical tolerance.
 
-The reported objective is higher than the paper's approximately $73.10M conventional benchmark. The difference is expected because this recreation uses project-specific cost-per-mile estimates, a narrower demand/fare window, fare imputation for missing routes, and reconstructed initial positions.
+The reported objective is higher than the paper's approximately USD 73.10M conventional benchmark. The difference is expected because this recreation uses project-specific cost-per-mile estimates, a narrower demand/fare window, fare imputation for missing routes, and reconstructed initial positions.
 
 ## Quick start
 
@@ -95,7 +96,7 @@ $env:FAM_RECREATION_ROOT = "C:\path\to\local\fam-recreation-aircraft-assignment"
 ├── T100/                    processed route-demand inputs
 ├── Results/                 FAM outputs and validation diagnostics
 ├── scripts/                 preprocessing, optimization and validation code
-└── docs/                    technical report and data notes
+└── docs/                    methodology and data notes
 ```
 
 ## Data and reproducibility notes
@@ -114,4 +115,6 @@ See [docs/data-sources.md](docs/data-sources.md) for the included/excluded files
 
 The methodology and findings are in [docs/methodology.md](docs/methodology.md).
 
+## Citation
 
+Please cite the original ICAS 2024 paper when using the model formulation or discussing the benchmark. This repository contains the recreation code and project-specific implementation notes; it does not redistribute the paper PDF.

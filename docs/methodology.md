@@ -8,7 +8,7 @@ The objective of the project was to implement a working integer-programming FAM 
 
 Fleet assignment is a central problem in airline operations because the choice of aircraft type affects operating cost, passenger spill, network feasibility, and downstream schedule robustness. Even when the fleet size is sufficient in aggregate, an airline schedule can become infeasible if aircraft are initially positioned at the wrong airports or if the time ordering of arrivals and departures is not respected. For this reason, the recreation did not only implement the final optimization model; it also required substantial preprocessing, cost construction, initial-condition reconstruction, and infeasibility debugging.
 
-Throughout this report, a distinction is made between three categories of information:
+Throughout this document, a distinction is made between three categories of information:
 
 - **Paper-based elements:** model structure, cost definitions, datasets, and benchmark results described in the Chan et al. paper.
 - **Implemented elements:** the specific Python/PuLP implementation developed in this project.
