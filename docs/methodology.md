@@ -20,19 +20,19 @@ The main operational dataset used in the recreation is the Envoy Air January 202
 
 The implementation constructs the following primary sets:
 
-$$
+```math
 F = \text{set of scheduled flights}
-$$
+```
 
-$$
+```math
 A = \{\text{ERJ145}, \text{ERJ170}, \text{ERJ175}\}
-$$
+```
 
-$$
+```math
 P = \text{set of airports appearing as origins or destinations}
-$$
+```
 
-Each schedule row is assigned a unique flight identifier of the form `F00001`, `F00002`, and so on. This is an implementation choice, because airline flight numbers repeat across days and may not uniquely identify a flight in a monthly schedule. The unique `FLIGHT_ID` therefore becomes the index \(f \in F\) used by the optimization model.
+Each schedule row is assigned a unique flight identifier of the form `F00001`, `F00002`, and so on. This is an implementation choice, because airline flight numbers repeat across days and may not uniquely identify a flight in a monthly schedule. The unique `FLIGHT_ID` therefore becomes the index $f \in F$ used by the optimization model.
 
 ### Time Indexing
 
@@ -49,23 +49,23 @@ An important implementation detail is that the final FAM does not create invento
 
 The assignment cost parameter is:
 
-$$
+```math
 c_{f,a}
-$$
+```
 
-where \(f\) is a flight and \(a\) is an aircraft type. Following the paper, the total assignment cost is represented as:
+where $f$ is a flight and $a$ is an aircraft type. Following the paper, the total assignment cost is represented as:
 
-$$
+```math
 c_{f,a} = o_{f,a} + s_{f,a}
-$$
+```
 
-where \(o_{f,a}\) is the operating cost of assigning aircraft type \(a\) to flight \(f\), and \(s_{f,a}\) is the spill cost associated with capacity-constrained passenger demand.
+where $o_{f,a}$ is the operating cost of assigning aircraft type $a$ to flight $f$, and $s_{f,a}$ is the spill cost associated with capacity-constrained passenger demand.
 
 In the implementation, operating cost is calculated using an aircraft-specific cost-per-mile value from Envoy Air Q1 2023 operating expense and mileage data:
 
-$$
+```math
 o_{f,a} = \text{Distance}_f \times \text{CostPerMile}_a
-$$
+```
 
 The calculated project values are approximately:
 
@@ -75,11 +75,11 @@ The calculated project values are approximately:
 
 Spill cost is calculated using the same conceptual formula as the paper:
 
-$$
+```math
 s_{f,a} = \max(D_f - C_a, 0) \times R_f
-$$
+```
 
-where \(D_f\) is average passenger demand for the route, \(C_a\) is the seating capacity of aircraft type \(a\), and \(R_f\) is the average fare for the origin-destination route. The capacities used in the implementation are:
+where $D_f$ is average passenger demand for the route, $C_a$ is the seating capacity of aircraft type $a$, and $R_f$ is the average fare for the origin-destination route. The capacities used in the implementation are:
 
 - ERJ145: 50 seats
 - ERJ170: 65 seats
@@ -89,7 +89,7 @@ Demand inputs are based on T-100 route-level data, while fare inputs are based o
 
 ### Fare Imputation Limitation
 
-The paper estimates demand and fares using a longer historical data window. For spill cost, it uses multi-year historical T-100 passenger/departure data and DB1B fare data, excluding the COVID-affected years 2020 and 2021. In the current recreation, the demand and fare pipeline is narrower: demand is derived from January 2023 T-100 route data, while fares are derived from Q1 2023 DB1B route data. This means the formula for spill cost is structurally the same as the paper, but the numerical estimates of \(D_f\) and \(R_f\) are not identical.
+The paper estimates demand and fares using a longer historical data window. For spill cost, it uses multi-year historical T-100 passenger/departure data and DB1B fare data, excluding the COVID-affected years 2020 and 2021. In the current recreation, the demand and fare pipeline is narrower: demand is derived from January 2023 T-100 route data, while fares are derived from Q1 2023 DB1B route data. This means the formula for spill cost is structurally the same as the paper, but the numerical estimates of $D_f$ and $R_f$ are not identical.
 
 In addition, some January 2023 route fares were missing from the available DB1B-derived route file. To avoid leaving undefined cost coefficients in the optimization model, the implementation temporarily imputes missing fares for routes used in the January schedule.
 
@@ -105,19 +105,19 @@ This affected 66 flight records in the final cost matrix, corresponding to four 
 
 The FAM requires an initial aircraft distribution:
 
-$$
+```math
 y_{a,p,0}
-$$
+```
 
-which represents the number of aircraft of type \(a\) initially located at airport \(p\) at the beginning of the planning horizon.
+which represents the number of aircraft of type $a$ initially located at airport $p$ at the beginning of the planning horizon.
 
 The paper notes that the model assumes initial conditions are available. In a real airline setting, these could come from the previous finalized schedule or internal aircraft-routing data. In this recreation, the exact initial aircraft locations were not directly available. Therefore, a proxy reconstruction was developed from observed tail-number activity in the processed schedule.
 
 For each tail number, the implementation identifies the earliest non-cancelled observed departure in the January schedule. The origin airport of that earliest departure is used as the proxy initial airport for that physical aircraft. This produces a tail-level table and then an aggregate aircraft-type/airport table:
 
-$$
+```math
 y^{proxy}_{a,p}
-$$
+```
 
 This proxy method is operationally reasonable for reconstructing a starting state from public schedule observations, but it is not guaranteed to reproduce the true historical initial aircraft positions. It assumes that the first observed departure airport in the month is the aircraft's starting location for the model horizon. That assumption can fail when the available data starts after aircraft have already been repositioned, when flights are cancelled, or when the observed schedule does not fully capture pre-horizon aircraft movements.
 
@@ -138,33 +138,33 @@ The implemented FAM follows the paper's integer linear programming structure. Th
 
 The primary assignment variable is:
 
-$$
+```math
 x_{f,a} \in \{0,1\}
-$$
+```
 
 where:
 
-$$
+```math
 x_{f,a} =
 \begin{cases}
 1, & \text{if flight } f \text{ is assigned aircraft type } a \\
 0, & \text{otherwise}
 \end{cases}
-$$
+```
 
 The model also uses two aircraft inventory variables at each active airport-time node:
 
-$$
+```math
 y^-_{a,p,t}
-$$
+```
 
 and:
 
-$$
+```math
 y^+_{a,p,t}
-$$
+```
 
-The variable \(y^-_{a,p,t}\) represents the number of aircraft of type \(a\) available at airport \(p\) immediately before processing events at time \(t\). The variable \(y^+_{a,p,t}\) represents the number of aircraft of type \(a\) remaining at airport \(p\) immediately after processing arrivals and departures at that same time node.
+The variable $y^-_{a,p,t}$ represents the number of aircraft of type $a$ available at airport $p$ immediately before processing events at time $t$. The variable $y^+_{a,p,t}$ represents the number of aircraft of type $a$ remaining at airport $p$ immediately after processing arrivals and departures at that same time node.
 
 This distinction is useful because arrivals and departures can occur at the same airport-time node. The model can express the conservation of aircraft before and after the events at that node without losing track of event ordering.
 
@@ -172,9 +172,9 @@ This distinction is useful because arrivals and departures can occur at the same
 
 The objective minimizes total assignment cost:
 
-$$
+```math
 \min \sum_{f \in F} \sum_{a \in A} c_{f,a} x_{f,a}
-$$
+```
 
 This is the implemented version of the paper's cost-minimization objective. It does not maximize revenue directly; passenger revenue enters indirectly through spill cost, which penalizes assigning aircraft with insufficient capacity to high-demand routes.
 
@@ -182,9 +182,9 @@ This is the implemented version of the paper's cost-minimization objective. It d
 
 Each flight must receive exactly one aircraft type:
 
-$$
+```math
 \sum_{a \in A} x_{f,a} = 1 \quad \forall f \in F
-$$
+```
 
 This constraint ensures that no flight is unassigned and no flight is assigned multiple aircraft types.
 
@@ -192,17 +192,17 @@ This constraint ensures that no flight is unassigned and no flight is assigned m
 
 The paper includes a range feasibility constraint. In the implementation, range-infeasible assignments are fixed to zero:
 
-$$
+```math
 x_{f,a} = 0 \quad \text{if } d_f > r_a
-$$
+```
 
-where \(d_f\) is the route distance and \(r_a\) is the maximum range of aircraft type \(a\). Since the paper does not provide all numerical range values used in the implementation, public aircraft range specifications are used and converted from nautical miles to statute miles to match the BTS distance units.
+where $d_f$ is the route distance and $r_a$ is the maximum range of aircraft type $a$. Since the paper does not provide all numerical range values used in the implementation, public aircraft range specifications are used and converted from nautical miles to statute miles to match the BTS distance units.
 
 ## 5. Flow Balance Formulation
 
 The core of the FAM is the time-space network flow balance. For each aircraft type, airport, and active time node, the model enforces:
 
-$$
+```math
 y^-_{a,p,t}
 +
 \sum_{f \in Arr(p,t)} x_{f,a}
@@ -210,11 +210,11 @@ y^-_{a,p,t}
 y^+_{a,p,t}
 +
 \sum_{f \in Dep(p,t)} x_{f,a}
-$$
+```
 
 The interpretation is:
 
-$$
+```math
 \text{aircraft available before events}
 +
 \text{arriving aircraft}
@@ -222,7 +222,7 @@ $$
 \text{aircraft remaining after events}
 +
 \text{departing aircraft}
-$$
+```
 
 This equation prevents the model from using aircraft that are not physically available at an airport. If two aircraft depart from an airport early in the horizon, the model must have enough initial inventory or prior arrivals to support those departures.
 
@@ -233,23 +233,23 @@ arrivals[destination, arr_t] += 1
 departures[origin, dep_t] += 1
 ```
 
-In the final FAM script, the event dictionaries store flight IDs rather than simple counts. For example, if flight \(f\) arrives at airport \(p\) at time \(t\), then \(f\) is included in `arrivals[(p,t)]`. If it departs from airport \(p\) at time \(t\), then \(f\) is included in `departures[(p,t)]`. The optimization model then sums the corresponding \(x_{f,a}\) variables over those arrival and departure sets.
+In the final FAM script, the event dictionaries store flight IDs rather than simple counts. For example, if flight $f$ arrives at airport $p$ at time $t$, then $f$ is included in `arrivals[(p,t)]`. If it departs from airport $p$ at time $t$, then $f$ is included in `departures[(p,t)]`. The optimization model then sums the corresponding $x_{f,a}$ variables over those arrival and departure sets.
 
 The initial condition constraint is:
 
-$$
+```math
 y^-_{a,p,0} = y_{a,p,0}
-$$
+```
 
 This anchors the time-space network to the reconstructed initial aircraft positions.
 
 The precedence constraint connects consecutive active time nodes at each airport:
 
-$$
+```math
 y^-_{a,p,t_i} = y^+_{a,p,t_{i-1}}
-$$
+```
 
-where \(t_{i-1}\) is the previous active time node at airport \(p\). This is the compressed-network equivalent of carrying aircraft inventory forward through time.
+where $t_{i-1}$ is the previous active time node at airport $p$. This is the compressed-network equivalent of carrying aircraft inventory forward through time.
 
 ## 6. Initial Infeasibility Investigation
 
@@ -269,13 +269,13 @@ The next diagnostic examined airport-level initial inventory requirements. Befor
 
 The LEX example illustrates the operational meaning of the diagnostic. If LEX starts with only one aircraft but has two early departures before sufficient arrivals occur, then the cumulative inventory becomes negative:
 
-$$
+```math
 1 - 1 - 1 = -1
-$$
+```
 
 That violates the nonnegative aircraft inventory logic of the FAM. In practical terms, the schedule asks LEX to send out more aircraft than are initially available there.
 
-This diagnosis shows that the original proxy \(y^{proxy}_{a,p}\) was not fully compatible with the time-space network, even though its total fleet count was correct.
+This diagnosis shows that the original proxy $y^{proxy}_{a,p}$ was not fully compatible with the time-space network, even though its total fleet count was correct.
 
 ## 7. Manual Feasibility Repair
 
@@ -294,34 +294,34 @@ This distinction is important for academic reporting. The manual repair demonstr
 
 ## 8. Optimization-Based Initial Position Repair
 
-To replace manual trial-and-error, a small minimum-change MILP was implemented to repair the initial aircraft distribution. The goal was to find a new initial distribution \(y^{new}_{a,p}\) that remains as close as possible to the proxy distribution \(y^{proxy}_{a,p}\), while preserving aircraft counts by type and satisfying airport-level minimum initial inventory requirements.
+To replace manual trial-and-error, a small minimum-change MILP was implemented to repair the initial aircraft distribution. The goal was to find a new initial distribution $y^{new}_{a,p}$ that remains as close as possible to the proxy distribution $y^{proxy}_{a,p}$, while preserving aircraft counts by type and satisfying airport-level minimum initial inventory requirements.
 
 The repair model minimizes the L1 deviation:
 
-$$
+```math
 \min \sum_{a \in A} \sum_{p \in P}
 \left| y^{new}_{a,p} - y^{proxy}_{a,p} \right|
-$$
+```
 
 Because absolute values are not directly linear, the implementation introduces positive and negative deviation variables:
 
-$$
+```math
 y^{new}_{a,p} - y^{proxy}_{a,p}
 = d^+_{a,p} - d^-_{a,p}
-$$
+```
 
 and minimizes:
 
-$$
+```math
 \sum_{a,p} (d^+_{a,p} + d^-_{a,p})
-$$
+```
 
 The fleet preservation constraints are:
 
-$$
+```math
 \sum_{p \in P} y^{new}_{a,p} = Fleet_a
 \quad \forall a \in A
-$$
+```
 
 These constraints prevent the repair model from creating or deleting aircraft. The final repaired fleet remains:
 
@@ -332,12 +332,12 @@ These constraints prevent the repair model from creating or deleting aircraft. T
 
 The airport feasibility constraints are:
 
-$$
+```math
 \sum_{a \in A} y^{new}_{a,p} \ge Required_p
 \quad \forall p \in P
-$$
+```
 
-where \(Required_p\) is computed from the most negative cumulative arrival-departure balance at airport \(p\). Operationally, this requires each airport to start with enough aircraft to survive its early departure pressure before incoming aircraft replenish inventory.
+where $Required_p$ is computed from the most negative cumulative arrival-departure balance at airport $p$. Operationally, this requires each airport to start with enough aircraft to survive its early departure pressure before incoming aircraft replenish inventory.
 
 The optimization repair found a minimum total L1 deviation of 4, equivalent to two aircraft relocations. The final changes from the proxy distribution are:
 
@@ -352,15 +352,15 @@ This exactly preserves aircraft counts by type. As with the manual repair, the M
 
 After replacing the infeasible proxy initial positions with the repaired initial positions, the project context records the final FAM solver status as:
 
-$$
+```math
 \text{Optimal}
-$$
+```
 
 with objective value:
 
-$$
+```math
 79{,}096{,}176.93 \text{ USD}
-$$
+```
 
 The committed run summary records the following assignment counts:
 
@@ -372,9 +372,9 @@ These counts sum to 18,849 flights, matching the full schedule size.
 
 The paper reports a conventional baseline objective of approximately 73.10 million USD. The recreated model's objective is therefore higher by approximately 6.0 million USD, or about 8.2 percent:
 
-$$
+```math
 \frac{79.096 - 73.10}{73.10} \approx 8.2\%
-$$
+```
 
 This difference is plausible given the known differences between the paper pipeline and the recreation. The paper discusses both an initial average cost-per-mile matrix and a more detailed operating-cost estimation approach using fuel burn and labor assumptions. The recreation currently uses a cost-per-mile operating-cost approximation plus spill costs. In addition, the recreation uses project-specific fare imputation for missing DB1B routes, reconstructs initial positions from first observed tail departures, and uses a processed fleet count of 101 ERJ175 aircraft rather than the 103 ERJ175 count appearing in one part of the paper.
 
