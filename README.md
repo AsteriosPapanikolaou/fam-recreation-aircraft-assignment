@@ -43,12 +43,12 @@ The committed result snapshot contains:
 
 - **18,849** scheduled flights;
 - **Optimal** CBC solution;
-- objective value **USD 79,096,176.93**;
+- objective value **USD 79.1 million**;
 - fleet of **137 aircraft**: 28 ERJ145, 8 ERJ170 and 101 ERJ175;
 - eligible aircraft-type match rate of **74.23%** across 18,367 operated flights with an available observed type;
 - cost recomputation check passed within numerical tolerance.
 
-The reported objective is higher than the paper's approximately USD 73.10M conventional benchmark. The difference is expected because this recreation uses project-specific cost-per-mile estimates, a narrower demand/fare window, fare imputation for missing routes, and reconstructed initial positions.
+The reported objective is higher than the paper's approximately USD 73.1 million conventional benchmark. The difference is expected because this recreation uses project-specific cost-per-mile estimates, a narrower demand/fare window, fare imputation for missing routes, and reconstructed initial positions.
 
 ## Quick start
 

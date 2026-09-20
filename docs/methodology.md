@@ -359,7 +359,7 @@ After replacing the infeasible proxy initial positions with the repaired initial
 with objective value:
 
 ```math
-79{,}096{,}176.93 \text{ USD}
+79.1 \text{ million USD}
 ```
 
 The committed run summary records the following assignment counts:
@@ -370,10 +370,10 @@ The committed run summary records the following assignment counts:
 
 These counts sum to 18,849 flights, matching the full schedule size.
 
-The paper reports a conventional baseline objective of approximately 73.10 million USD. The recreated model's objective is therefore higher by approximately 6.0 million USD, or about 8.2 percent:
+The paper reports a conventional baseline objective of approximately 73.1 million USD. The recreated model's objective is therefore higher by approximately 6.0 million USD, or about 8.2 percent:
 
 ```math
-\frac{79.096 - 73.10}{73.10} \approx 8.2\%
+\frac{79.1 - 73.1}{73.1} \approx 8.2\%
 ```
 
 This difference is plausible given the known differences between the paper pipeline and the recreation. The paper discusses both an initial average cost-per-mile matrix and a more detailed operating-cost estimation approach using fuel burn and labor assumptions. The recreation currently uses a cost-per-mile operating-cost approximation plus spill costs. In addition, the recreation uses project-specific fare imputation for missing DB1B routes, reconstructs initial positions from first observed tail departures, and uses a processed fleet count of 101 ERJ175 aircraft rather than the 103 ERJ175 count appearing in one part of the paper.
